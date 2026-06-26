@@ -1,0 +1,77 @@
+package net.nimbu.clothing.model;
+
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.ClientHooks;
+import net.nimbu.clothing.Clothing;
+import net.nimbu.clothing.tags.ModTags;
+
+public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
+
+    private final PlayerModel<AbstractClientPlayer> model;
+
+    public ClothingLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent,
+                         EntityRendererProvider.Context context, boolean slim) {
+        super(parent);
+        this.model = new PlayerModel<>(
+                context.bakeLayer(slim ? ModelLayers.PLAYER_SLIM : ModelLayers.PLAYER),
+                slim);
+    }
+
+    @Override
+    public void render(PoseStack poseStack,
+                       MultiBufferSource buffer,
+                       int packedLight,
+                       AbstractClientPlayer player,
+                       float limbSwing,
+                       float limbSwingAmount,
+                       float partialTicks,
+                       float ageInTicks,
+                       float netHeadYaw,
+                       float headPitch) {
+
+        this.getParentModel().copyPropertiesTo(model);
+
+        model.prepareMobModel(player, limbSwing, limbSwingAmount, partialTicks);
+        model.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
+                ItemStack stack = player.getItemBySlot(slot);
+                if (!stack.isEmpty() && stack.is(ModTags.Items.CLOTHING)) {
+                    ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+                    ResourceLocation texture = resolveTexture(id.getPath());
+                    VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
+                    model.renderToBuffer(
+                            poseStack,
+                            vc,
+                            packedLight,
+                            OverlayTexture.NO_OVERLAY);
+                }
+            }
+        }
+    }
+
+
+    private ResourceLocation resolveTexture(String path) {
+        String itemType = path.contains("_")
+                ? path.substring(0, path.indexOf('_'))
+                : path;
+        return ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/"+itemType+"_layer.png");
+    }
+}

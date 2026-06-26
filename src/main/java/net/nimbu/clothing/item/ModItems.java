@@ -12,8 +12,29 @@ import net.nimbu.clothing.Clothing;
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Clothing.MOD_ID);
 
-    public static final DeferredItem<Item> JACKET = ITEMS.register("jacket",
-            () -> new ArmorItem(ArmorMaterials.LEATHER, ArmorItem.Type.BODY, new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> CLOTH = ITEMS.register("cloth",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> HOODIE = ITEMS.register("hoodie",
+            () -> new ArmorItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.CHESTPLATE,
+                    new Item.Properties()
+                            .durability(ArmorItem.Type.CHESTPLATE.getDurability(10))));
+
+    public static final DeferredItem<Item> HOODIE_PANTS = ITEMS.register("sweatpants",
+            () -> new ArmorItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.LEGGINGS,
+                    new Item.Properties()
+                            .durability(ArmorItem.Type.LEGGINGS.getDurability(10))));
+
+    public static final DeferredItem<Item> HOODIE_SHOES = ITEMS.register("sneakers",
+            () -> new ArmorItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.BOOTS,
+                    new Item.Properties()
+                            .durability(ArmorItem.Type.BOOTS.getDurability(10))));
+
+//    public static final DeferredItem<Item> HOODIE_HOOD = ITEMS.register("hoodie_hood",
+//            () -> new ArmorItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.HELMET,
+//                    new Item.Properties()
+//                            .durability(ArmorItem.Type.HELMET.getDurability(10))));
+
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
