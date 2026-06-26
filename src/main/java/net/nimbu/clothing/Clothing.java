@@ -1,5 +1,6 @@
 package net.nimbu.clothing;
 
+import net.minecraft.world.item.CreativeModeTabs;
 import net.nimbu.clothing.item.ModItems;
 import org.slf4j.Logger;
 
@@ -19,7 +20,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 @Mod(Clothing.MOD_ID)
 public class Clothing {
     // Define mod id in a common place for everything to reference
-    public static final String MOD_ID = "nimbusclothing";
+    public static final String MOD_ID = "clothing";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -46,7 +47,15 @@ public class Clothing {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItems.CLOTH);
+        }
+        else if(event.getTabKey() == CreativeModeTabs.COMBAT){
+            event.accept(ModItems.HOODIE);
+            event.accept(ModItems.HOODIE_PANTS);
+            //event.accept(ModItems.HOODIE_HOOD);
+            event.accept(ModItems.HOODIE_SHOES);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
