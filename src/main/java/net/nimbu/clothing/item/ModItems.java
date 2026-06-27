@@ -1,8 +1,6 @@
 package net.nimbu.clothing.item;
 
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -20,12 +18,12 @@ public class ModItems {
                     new Item.Properties()
                             .durability(ArmorItem.Type.CHESTPLATE.getDurability(10))));
 
-    public static final DeferredItem<Item> HOODIE_PANTS = ITEMS.register("sweatpants",
+    public static final DeferredItem<Item> SWEATPANTS = ITEMS.register("sweatpants",
             () -> new ArmorItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.LEGGINGS,
                     new Item.Properties()
                             .durability(ArmorItem.Type.LEGGINGS.getDurability(10))));
 
-    public static final DeferredItem<Item> HOODIE_SHOES = ITEMS.register("sneakers",
+    public static final DeferredItem<Item> SNEAKERS = ITEMS.register("sneakers",
             () -> new ArmorItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.BOOTS,
                     new Item.Properties()
                             .durability(ArmorItem.Type.BOOTS.getDurability(10))));

@@ -29,16 +29,20 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.HOODIE.get());
 
         this.tag(ItemTags.LEG_ARMOR)
-                .add(ModItems.HOODIE_PANTS.get());
+                .add(ModItems.SWEATPANTS.get());
 
         this.tag(ItemTags.FOOT_ARMOR)
-                .add(ModItems.HOODIE_SHOES.get());
+                .add(ModItems.SNEAKERS.get());
 
         this.tag(ModTags.Items.CLOTHING)
                 .add(ModItems.HOODIE.get())
-                .add(ModItems.HOODIE_PANTS.get())
-                //.add(ModItems.HOODIE_HOOD.get())
-                .add(ModItems.HOODIE_SHOES.get());
+                .add(ModItems.SWEATPANTS.get())
+                .add(ModItems.SNEAKERS.get());
+
+        this.tag(ItemTags.DYEABLE)
+                .add(ModItems.HOODIE.get())
+                .add(ModItems.SWEATPANTS.get())
+                .add(ModItems.SNEAKERS.get());
 
 
     }
