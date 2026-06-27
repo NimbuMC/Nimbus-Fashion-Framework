@@ -52,9 +52,9 @@ public class Clothing {
         }
         else if(event.getTabKey() == CreativeModeTabs.COMBAT){
             event.accept(ModItems.HOODIE);
-            event.accept(ModItems.HOODIE_PANTS);
+            event.accept(ModItems.SWEATPANTS);
             //event.accept(ModItems.HOODIE_HOOD);
-            event.accept(ModItems.HOODIE_SHOES);
+            event.accept(ModItems.SNEAKERS);
         }
     }
 

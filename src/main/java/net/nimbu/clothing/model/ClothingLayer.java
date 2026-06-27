@@ -12,11 +12,13 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.nimbu.clothing.Clothing;
 import net.nimbu.clothing.tags.ModTags;
@@ -50,19 +52,27 @@ public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
         model.prepareMobModel(player, limbSwing, limbSwingAmount, partialTicks);
         model.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
-                ItemStack stack = player.getItemBySlot(slot);
-                if (!stack.isEmpty() && stack.is(ModTags.Items.CLOTHING)) {
-                    ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-                    ResourceLocation texture = resolveTexture(id.getPath());
-                    VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
-                    model.renderToBuffer(
-                            poseStack,
-                            vc,
-                            packedLight,
-                            OverlayTexture.NO_OVERLAY);
-                }
+        for (EquipmentSlot slot : new EquipmentSlot[] {
+                EquipmentSlot.HEAD,
+                EquipmentSlot.CHEST, //TODO: rendering in wrong order? somehow?
+                EquipmentSlot.FEET,
+                EquipmentSlot.LEGS
+        }) {
+            ItemStack stack = player.getItemBySlot(slot);
+            if (!stack.isEmpty() && stack.is(ModTags.Items.CLOTHING)) {
+                ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+                ResourceLocation texture = resolveTexture(id.getPath());
+                VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
+                int color = stack.getOrDefault(
+                        DataComponents.DYED_COLOR,
+                        new DyedItemColor(0xFFFFFF, false)).rgb();
+                        model.renderToBuffer(
+                        poseStack,
+                        vc,
+                        packedLight,
+                        OverlayTexture.NO_OVERLAY,
+                        color
+                        );
             }
         }
     }
