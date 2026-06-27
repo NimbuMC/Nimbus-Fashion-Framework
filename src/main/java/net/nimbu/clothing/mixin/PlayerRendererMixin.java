@@ -58,17 +58,4 @@ public class PlayerRendererMixin {
             model.rightPants.visible = false;
         }
     }
-
-
-
-
-
-
-    //    @Inject(method = "getTextureLocation", at = @At("HEAD"), cancellable = true)
-//    private void overrideTexture(AbstractClientPlayer player, CallbackInfoReturnable<ResourceLocation> cir) {
-//            cir.setReturnValue(
-//                    ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/armor/hoodie_layer.png")
-//            );
-//
-//    }
 }
