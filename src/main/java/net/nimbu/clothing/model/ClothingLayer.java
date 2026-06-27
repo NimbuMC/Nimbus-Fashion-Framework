@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.nimbu.clothing.Clothing;
+import net.nimbu.clothing.item.custom.ClothingItem;
 import net.nimbu.clothing.tags.ModTags;
 
 public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
@@ -53,35 +54,46 @@ public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
         model.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
         for (EquipmentSlot slot : new EquipmentSlot[] {
-                EquipmentSlot.HEAD,
-                EquipmentSlot.CHEST, //TODO: rendering in wrong order? somehow?
+                EquipmentSlot.LEGS,
                 EquipmentSlot.FEET,
-                EquipmentSlot.LEGS
+                EquipmentSlot.CHEST,
+                EquipmentSlot.HEAD
         }) {
             ItemStack stack = player.getItemBySlot(slot);
             if (!stack.isEmpty() && stack.is(ModTags.Items.CLOTHING)) {
-                ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-                ResourceLocation texture = resolveTexture(id.getPath());
+                if (stack.getItem() instanceof ClothingItem clothingItem){
+
+                String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+
+
+                //Draw the dyed layer
+                ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/"+path+"_layer_0.png");
                 VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
                 int color = stack.getOrDefault(
                         DataComponents.DYED_COLOR,
-                        new DyedItemColor(0xFFFFFF, false)).rgb();
-                        model.renderToBuffer(
+                        new DyedItemColor(clothingItem.getDefaultColor(), false)).rgb();
+
+                model.renderToBuffer(
                         poseStack,
                         vc,
                         packedLight,
                         OverlayTexture.NO_OVERLAY,
                         color
-                        );
+                );
+
+                //Draw the non-dyed layer
+                texture = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/"+path+"_layer_1.png");
+                vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
+
+                model.renderToBuffer(
+                        poseStack,
+                        vc,
+                        packedLight,
+                        OverlayTexture.NO_OVERLAY
+                );
+
+                }
             }
         }
-    }
-
-
-    private ResourceLocation resolveTexture(String path) {
-        String itemType = path.contains("_")
-                ? path.substring(0, path.indexOf('_'))
-                : path;
-        return ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/"+itemType+"_layer.png");
     }
 }

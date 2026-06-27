@@ -33,8 +33,6 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         basicItem(ModItems.CLOTH.get());
-
-
         basicItem(ModItems.HOODIE.get());
     }
 

@@ -12,6 +12,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.nimbu.clothing.item.ModItems;
+import net.nimbu.clothing.item.custom.ClothingItem;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = Clothing.MOD_ID, dist = Dist.CLIENT)
@@ -33,11 +34,13 @@ public class ClothingClient {
             minecraft.getItemColors().register(
                     (stack, tintIndex) -> {
                         if (tintIndex == 0) {
-                            return 0xFF000000 | //ORs in the alpha value
-                                    stack.getOrDefault(
-                                            DataComponents.DYED_COLOR,
-                                            new DyedItemColor(0xd37d19, false)
-                                    ).rgb();
+                            if(stack.getItem() instanceof ClothingItem clothingItem) {
+                                return 0xFF000000 | //ORs in the alpha value
+                                        stack.getOrDefault(
+                                                DataComponents.DYED_COLOR,
+                                                new DyedItemColor(clothingItem.getDefaultColor(), false)
+                                        ).rgb();
+                            }
                         }
                         return 0xFFFFFFFF;
                     },

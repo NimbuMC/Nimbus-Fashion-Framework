@@ -10,5 +10,8 @@
   "examplemod.configuration.magicNumber": "Magic Number",
 
   "item.clothing.cloth": "Cloth",
-  "item.clothing.hoodie": "Hoodie"
+  "item.clothing.hoodie": "Hoodie",
+  "item.clothing.sunglasses": "Sunglasses",
+  "item.clothing.sweatpants": "Sweatpants",
+  "item.clothing.Sneakers": "Sneakers"
 }

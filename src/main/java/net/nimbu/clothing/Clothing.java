@@ -1,6 +1,7 @@
 package net.nimbu.clothing;
 
 import net.minecraft.world.item.CreativeModeTabs;
+import net.nimbu.clothing.block.ModBlocks;
 import net.nimbu.clothing.item.ModItems;
 import org.slf4j.Logger;
 
@@ -39,6 +40,7 @@ public class Clothing {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
