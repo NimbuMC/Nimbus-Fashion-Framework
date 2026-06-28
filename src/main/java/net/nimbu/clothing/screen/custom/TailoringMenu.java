@@ -18,6 +18,8 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
+import net.nimbu.clothing.block.ModBlocks;
+import net.nimbu.clothing.screen.ModMenuTypes;
 
 import java.util.List;
 
@@ -36,32 +38,32 @@ public class TailoringMenu extends AbstractContainerMenu {
 //    private final Slot patternSlot;
 //    private final Slot resultSlot;
     long lastSoundTime;
-//    private final Container inputContainer;
-//    private final Container outputContainer;
+    private final Container inputContainer;
+    private final Container outputContainer;
 
     public TailoringMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf registryFriendlyByteBuf) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL);
     }
 
     public TailoringMenu(int containerId, Inventory playerInventory, final ContainerLevelAccess access) {
-        super(MenuType.LOOM, containerId);
+        super(ModMenuTypes.TAILORING.get(), containerId);
 //        this.selectedBannerPatternIndex = DataSlot.standalone();
 //        this.selectablePatterns = List.of();
 //        this.slotUpdateListener = () -> {
 //        };
-//        this.inputContainer = new SimpleContainer(3) {
+        this.inputContainer = new SimpleContainer(3) {
 //            public void setChanged() {
 //                super.setChanged();
 //                TailoringMenu.this.slotsChanged(this);
 //                TailoringMenu.this.slotUpdateListener.run();
 //            }
-//        };
-//        this.outputContainer = new SimpleContainer(1) {
+        };
+        this.outputContainer = new SimpleContainer(1) {
 //            public void setChanged() {
 //                super.setChanged();
 //                TailoringMenu.this.slotUpdateListener.run();
 //            }
-//        };
+        };
         this.access = access;
 //        this.fabricSheetSlot = this.addSlot(new Slot(this.inputContainer, 0, 13, 26) {
 //            public boolean mayPlace(ItemStack p_39918_) {
@@ -113,7 +115,7 @@ public class TailoringMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(this.access, player, Blocks.LOOM);
+        return stillValid(this.access, player, ModBlocks.TAILORING_TABLE.get());
     }
 
 //    @Override
@@ -259,13 +261,13 @@ public class TailoringMenu extends AbstractContainerMenu {
         return itemstack;
     }
 
-//    @Override
-//    public void removed(Player player) {
-//        super.removed(player);
-//        this.access.execute((p_39871_, p_39872_) -> {
-//            this.clearContainer(player, this.inputContainer);
-//        });
-//    }
+    @Override
+    public void removed(Player player) {
+        super.removed(player);
+        this.access.execute((p_39871_, p_39872_) -> {
+            this.clearContainer(player, this.inputContainer);
+        });
+    }
 
     private void setupResultSlot(Holder<BannerPattern> pattern) {
 //        ItemStack itemstack = this.fabricSheetSlot.getItem();
