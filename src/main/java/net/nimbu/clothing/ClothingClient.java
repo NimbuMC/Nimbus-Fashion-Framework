@@ -9,10 +9,13 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.nimbu.clothing.item.ModItems;
 import net.nimbu.clothing.item.custom.ClothingItem;
+import net.nimbu.clothing.screen.ModMenuTypes;
+import net.nimbu.clothing.screen.custom.TailoringScreen;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = Clothing.MOD_ID, dist = Dist.CLIENT)
@@ -48,5 +51,10 @@ public class ClothingClient {
             );
         });
 
+    }
+
+    @SubscribeEvent
+    public static void registerScreens(RegisterMenuScreensEvent event){
+        event.register(ModMenuTypes.TAILORING.get(), TailoringScreen::new);
     }
 }

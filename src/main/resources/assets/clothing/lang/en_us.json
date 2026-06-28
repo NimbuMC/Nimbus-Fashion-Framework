@@ -10,6 +10,10 @@
   "examplemod.configuration.magicNumber": "Magic Number",
 
   "item.clothing.cloth": "Cloth",
+  "block.clothing.tailoring_table": "Tailoring Table",
+  "container.tailor": "Tailoring Table",
+
+
   "item.clothing.hoodie": "Hoodie",
   "item.clothing.sunglasses": "Sunglasses",
   "item.clothing.sweatpants": "Sweatpants",
