@@ -1,15 +1,10 @@
 package net.nimbu.clothing.datagen;
 
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimMaterials;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.nimbu.clothing.Clothing;
 import net.nimbu.clothing.item.ModItems;
-
-import java.util.LinkedHashMap;
 
 public class ModItemModelProvider extends ItemModelProvider {
 //    private static LinkedHashMap<ResourceKey<TrimMaterial>, Float> trimMaterials = new LinkedHashMap<>();
@@ -32,7 +27,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        basicItem(ModItems.CLOTH.get());
+        basicItem(ModItems.FABRIC_SHEET.get());
         basicItem(ModItems.HOODIE.get());
     }
 

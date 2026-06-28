@@ -27,7 +27,7 @@ public class ModArmorMaterials {
                 attribute.put(ArmorItem.Type.CHESTPLATE, 0);
                 attribute.put(ArmorItem.Type.HELMET, 0);
                 attribute.put(ArmorItem.Type.BODY, 3); //for animals
-            }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, () -> ModItems.CLOTH.get());
+            }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, () -> ModItems.FABRIC_SHEET.get());
 
 
     private static Holder<ArmorMaterial> register(String name, EnumMap<ArmorItem.Type, Integer> typeProtection,

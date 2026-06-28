@@ -11,7 +11,7 @@ import net.nimbu.clothing.item.custom.ClothingItem;
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Clothing.MOD_ID);
 
-    public static final DeferredItem<Item> CLOTH = ITEMS.register("cloth",
+    public static final DeferredItem<Item> FABRIC_SHEET = ITEMS.register("fabric_sheet",
             () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> HOODIE = ITEMS.register("hoodie",
