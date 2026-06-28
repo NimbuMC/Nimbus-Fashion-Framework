@@ -3,6 +3,7 @@ package net.nimbu.clothing;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.nimbu.clothing.block.ModBlocks;
 import net.nimbu.clothing.item.ModItems;
+import net.nimbu.clothing.screen.ModMenuTypes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -41,6 +42,7 @@ public class Clothing {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -51,6 +53,7 @@ public class Clothing {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(ModItems.CLOTH);
+            event.accept(ModBlocks.TAILORING_TABLE);
         }
         else if(event.getTabKey() == CreativeModeTabs.COMBAT){
             event.accept(ModItems.HOODIE);
