@@ -52,7 +52,7 @@ public class Clothing {
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.CLOTH);
+            event.accept(ModItems.FABRIC_SHEET);
             event.accept(ModBlocks.TAILORING_TABLE);
         }
         else if(event.getTabKey() == CreativeModeTabs.COMBAT){

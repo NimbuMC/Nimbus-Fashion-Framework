@@ -1,22 +1,28 @@
 package net.nimbu.clothing.screen.custom;
 
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.gui.screens.inventory.CyclingSlotBackground;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.SlotItemHandler;
+import net.nimbu.clothing.Clothing;
 import net.nimbu.clothing.block.ModBlocks;
+import net.nimbu.clothing.item.ModItems;
 import net.nimbu.clothing.screen.ModMenuTypes;
 
 public class TailoringMenu extends ItemCombinerMenu {
 
     private final static int NO_OF_SLOTS = 3;
-    private final Container inputContainer = new SimpleContainer(NO_OF_SLOTS);
+    //private final Container inputContainer = new SimpleContainer(NO_OF_SLOTS);
 
     private final Level level;
     //private final Player owner;
@@ -34,7 +40,6 @@ public class TailoringMenu extends ItemCombinerMenu {
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
     }
-
 
 
     private void addPlayerInventory(Inventory playerInventory){
@@ -124,9 +129,28 @@ public class TailoringMenu extends ItemCombinerMenu {
     @Override
     protected ItemCombinerMenuSlotDefinition createInputSlotDefinitions() {
         return ItemCombinerMenuSlotDefinition.create()
-                .withSlot(0, 12, 24, stack -> true)
-                .withSlot(1, 12, 44, stack -> true)
+                .withSlot(0, 13, 25, stack -> true)
+                .withSlot(1, 13, 45, stack -> true)
                 .withResultSlot(2, 146, 57)
                 .build();
+
+
     }
+//
+//    public class LapisSlot extends Slot {
+//
+//        public LapisSlot(Container container, int index, int x, int y) {
+//            super(container, index, x, y);
+//        }
+//
+//        @Override
+//        public boolean mayPlace(ItemStack stack) {
+//            return stack.is(ModItems.FABRIC_SHEET);
+//        }
+//
+//        @Override
+//        public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+//            return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_FABRIC_SHEET);
+//        }
+//    }
 }
