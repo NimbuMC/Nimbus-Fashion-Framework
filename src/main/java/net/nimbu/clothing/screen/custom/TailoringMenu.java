@@ -1,156 +1,297 @@
 package net.nimbu.clothing.screen.custom;
 
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.gui.screens.inventory.CyclingSlotBackground;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BannerPatternTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.SlotItemHandler;
-import net.nimbu.clothing.Clothing;
-import net.nimbu.clothing.block.ModBlocks;
-import net.nimbu.clothing.item.ModItems;
-import net.nimbu.clothing.screen.ModMenuTypes;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
 
-public class TailoringMenu extends ItemCombinerMenu {
+import java.util.List;
 
-    private final static int NO_OF_SLOTS = 3;
-    //private final Container inputContainer = new SimpleContainer(NO_OF_SLOTS);
-
-    private final Level level;
-    //private final Player owner;
-
+public class TailoringMenu extends AbstractContainerMenu {
+    private static final int PATTERN_NOT_SET = -1;
+    private static final int INV_SLOT_START = 4;
+    private static final int INV_SLOT_END = 31;
+    private static final int USE_ROW_SLOT_START = 31;
+    private static final int USE_ROW_SLOT_END = 40;
+    private final ContainerLevelAccess access;
+//    final DataSlot selectedBannerPatternIndex;
+    private List<Holder<BannerPattern>> selectablePatterns;
+    Runnable slotUpdateListener;
+//    private final HolderGetter<BannerPattern> patternGetter;
+//    final Slot fabricSheetSlot;
+//    private final Slot patternSlot;
+//    private final Slot resultSlot;
+    long lastSoundTime;
+//    private final Container inputContainer;
+//    private final Container outputContainer;
 
     public TailoringMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf registryFriendlyByteBuf) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL);
     }
 
-    public TailoringMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
-        super(ModMenuTypes.TAILORING.get(), containerId, playerInventory, access);
-        //this.owner = owner;
-        this.level = playerInventory.player.level();
-
-        addPlayerInventory(playerInventory);
-        addPlayerHotbar(playerInventory);
-    }
-
-
-    private void addPlayerInventory(Inventory playerInventory){
-        for(int i = 0; i<3; ++i){
-            for(int l=0; l<0; l++){
-                this.addSlot(new Slot(playerInventory, l+i*9+9, 8+l*18, 84+i*18));
-            }
-        }
-    }
-
-    private void addPlayerHotbar(Inventory playerInventory){
-        for(int i =0; i<9; ++i){
-            this.addSlot(new Slot(playerInventory, i, 8+i*18, 142));
-        }
-    }
-
-    // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
-    // must assign a slot number to each of the slots used by the GUI.
-    // For this container, we can see both the tile inventory's slots as well as the player inventory slots and the hotbar.
-    // Each time we add a Slot to the container, it automatically increases the slotIndex, which means
-    //  0 - 8 = hotbar slots (which will map to the InventoryPlayer slot numbers 0 - 8)
-    //  9 - 35 = player inventory slots (which map to the InventoryPlayer slot numbers 9 - 35)
-    //  36 - 44 = TileInventory slots, which map to our TileEntity slot numbers 0 - 8)
-    private static final int HOTBAR_SLOT_COUNT = 9;
-    private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
-    private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
-    private static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
-    private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
-    private static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-
-    // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = NO_OF_SLOTS;  // must be the number of slots you have!
-    @Override
-    public ItemStack quickMoveStack(Player playerIn, int pIndex) {
-        Slot sourceSlot = slots.get(pIndex);
-        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
-        ItemStack sourceStack = sourceSlot.getItem();
-        ItemStack copyOfSourceStack = sourceStack.copy();
-
-        // Check if the slot clicked is one of the vanilla container slots
-        if (pIndex < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-            // This is a vanilla container slot so merge the stack into the tile inventory
-            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
-                    + TE_INVENTORY_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;  // EMPTY_ITEM
-            }
-        } else if (pIndex < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
-            // This is a TE slot so merge the stack into the players inventory
-            if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else {
-            System.out.println("Invalid slotIndex:" + pIndex);
-            return ItemStack.EMPTY;
-        }
-        // If stack size == 0 (the entire stack was moved) set slot contents to null
-        if (sourceStack.getCount() == 0) {
-            sourceSlot.set(ItemStack.EMPTY);
-        } else {
-            sourceSlot.setChanged();
-        }
-        sourceSlot.onTake(playerIn, sourceStack);
-        return copyOfSourceStack;
-    }
-
-    @Override
-    protected boolean mayPickup(Player player, boolean b) {
-        return false;
-    }
-
-    @Override
-    protected void onTake(Player player, ItemStack itemStack) {
-
-    }
-
-    @Override
-    protected boolean isValidBlock(BlockState state) {
-        return state.is(ModBlocks.TAILORING_TABLE.get());
-    }
-
-    @Override
-    public void createResult() {
-
-    }
-
-    @Override
-    protected ItemCombinerMenuSlotDefinition createInputSlotDefinitions() {
-        return ItemCombinerMenuSlotDefinition.create()
-                .withSlot(0, 13, 25, stack -> true)
-                .withSlot(1, 13, 45, stack -> true)
-                .withResultSlot(2, 146, 57)
-                .build();
-
-
-    }
+    public TailoringMenu(int containerId, Inventory playerInventory, final ContainerLevelAccess access) {
+        super(MenuType.LOOM, containerId);
+//        this.selectedBannerPatternIndex = DataSlot.standalone();
+//        this.selectablePatterns = List.of();
+//        this.slotUpdateListener = () -> {
+//        };
+//        this.inputContainer = new SimpleContainer(3) {
+//            public void setChanged() {
+//                super.setChanged();
+//                TailoringMenu.this.slotsChanged(this);
+//                TailoringMenu.this.slotUpdateListener.run();
+//            }
+//        };
+//        this.outputContainer = new SimpleContainer(1) {
+//            public void setChanged() {
+//                super.setChanged();
+//                TailoringMenu.this.slotUpdateListener.run();
+//            }
+//        };
+        this.access = access;
+//        this.fabricSheetSlot = this.addSlot(new Slot(this.inputContainer, 0, 13, 26) {
+//            public boolean mayPlace(ItemStack p_39918_) {
+//                return p_39918_.getItem() instanceof BannerItem;
+//            }
+//        });
+//        this.patternSlot = this.addSlot(new Slot(this.inputContainer, 2, 23, 45) {
+//            public boolean mayPlace(ItemStack p_39936_) {
+//                return p_39936_.getItem() instanceof BannerPatternItem;
+//            }
+//        });
+//        this.resultSlot = this.addSlot(new Slot(this.outputContainer, 0, 143, 57) {
+//            public boolean mayPlace(ItemStack stack) {
+//                return false;
+//            }
 //
-//    public class LapisSlot extends Slot {
-//
-//        public LapisSlot(Container container, int index, int x, int y) {
-//            super(container, index, x, y);
+////            public void onTake(Player player, ItemStack stack) {
+////                TailoringMenu.this.fabricSheetSlot.remove(1);
+////                if (!TailoringMenu.this.fabricSheetSlot.hasItem()) {
+////                    TailoringMenu.this.selectedBannerPatternIndex.set(-1);
+////                }
+////
+////                access.execute((p_39952_, p_39953_) -> {
+////                    long l = p_39952_.getGameTime();
+////                    if (TailoringMenu.this.lastSoundTime != l) {
+////                        p_39952_.playSound((Player)null, p_39953_, SoundEvents.UI_LOOM_TAKE_RESULT, SoundSource.BLOCKS, 1.0F, 1.0F);
+////                        TailoringMenu.this.lastSoundTime = l;
+////                    }
+////
+////                });
+////                super.onTake(player, stack);
+////            }
+//        });
+
+//        int k;
+//        for(k = 0; k < 3; ++k) {
+//            for(int j = 0; j < 9; ++j) {
+//                this.addSlot(new Slot(playerInventory, j + k * 9 + 9, 8 + j * 18, 84 + k * 18));
+//            }
 //        }
 //
-//        @Override
-//        public boolean mayPlace(ItemStack stack) {
-//            return stack.is(ModItems.FABRIC_SHEET);
+//        for(k = 0; k < 9; ++k) {
+//            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
 //        }
 //
-//        @Override
-//        public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-//            return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_FABRIC_SHEET);
+//        this.addDataSlot(this.selectedBannerPatternIndex);
+//        this.patternGetter = playerInventory.player.registryAccess().lookupOrThrow(Registries.BANNER_PATTERN);
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return stillValid(this.access, player, Blocks.LOOM);
+    }
+
+//    @Override
+//    public boolean clickMenuButton(Player player, int id) {
+//        if (id >= 0 && id < this.selectablePatterns.size()) {
+//            this.selectedBannerPatternIndex.set(id);
+//            this.setupResultSlot((Holder)this.selectablePatterns.get(id));
+//            return true;
+//        } else {
+//            return false;
 //        }
+//    }
+
+
+//    private List<Holder<BannerPattern>> getSelectablePatterns(ItemStack stack) {
+//        if (stack.isEmpty()) {
+//            return (List)this.patternGetter.get(BannerPatternTags.NO_ITEM_REQUIRED).map(ImmutableList::copyOf).orElse(ImmutableList.of());
+//        } else {
+//            Item var3 = stack.getItem();
+//            List var10000;
+//            if (var3 instanceof BannerPatternItem) {
+//                BannerPatternItem bannerpatternitem = (BannerPatternItem)var3;
+//                var10000 = (List)this.patternGetter.get(bannerpatternitem.getBannerPattern()).map(ImmutableList::copyOf).orElse(ImmutableList.of());
+//            } else {
+//                var10000 = List.of();
+//            }
+//
+//            return var10000;
+//        }
+//    }
+
+//    private boolean isValidPatternIndex(int index) {
+//        return index >= 0 && index < this.selectablePatterns.size();
+//    }
+
+    public void slotsChanged(Container inventory) {
+//        ItemStack itemstack = this.fabricSheetSlot.getItem();
+//        ItemStack itemstack2 = this.patternSlot.getItem();
+//        if (!itemstack.isEmpty()) {
+//            int i = this.selectedBannerPatternIndex.get();
+//            boolean flag = this.isValidPatternIndex(i);
+//            List<Holder<BannerPattern>> list = this.selectablePatterns;
+//            this.selectablePatterns = this.getSelectablePatterns(itemstack2);
+//            Holder holder;
+//            if (this.selectablePatterns.size() == 1) {
+//                this.selectedBannerPatternIndex.set(0);
+//                holder = (Holder)this.selectablePatterns.get(0);
+//            } else if (!flag) {
+//                this.selectedBannerPatternIndex.set(-1);
+//                holder = null;
+//            } else {
+//                Holder<BannerPattern> holder1 = (Holder)list.get(i);
+//                int j = this.selectablePatterns.indexOf(holder1);
+//                if (j != -1) {
+//                    holder = holder1;
+//                    this.selectedBannerPatternIndex.set(j);
+//                } else {
+//                    holder = null;
+//                    this.selectedBannerPatternIndex.set(-1);
+//                }
+//            }
+//
+//            if (holder != null) {
+//                BannerPatternLayers bannerpatternlayers = (BannerPatternLayers)itemstack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
+//                boolean flag1 = bannerpatternlayers.layers().size() >= 6;
+//                if (flag1) {
+//                    this.selectedBannerPatternIndex.set(-1);
+//                    this.resultSlot.set(ItemStack.EMPTY);
+//                } else {
+//                    this.setupResultSlot(holder);
+//                }
+//            } else {
+//                this.resultSlot.set(ItemStack.EMPTY);
+//            }
+//
+//            this.broadcastChanges();
+//        } else {
+//            this.resultSlot.set(ItemStack.EMPTY);
+//            this.selectablePatterns = List.of();
+//            this.selectedBannerPatternIndex.set(-1);
+//        }
+
+    }
+
+//    public List<Holder<BannerPattern>> getSelectablePatterns() {
+//        return this.selectablePatterns;
+//    }
+//
+//    public int getSelectedBannerPatternIndex() {
+//        return this.selectedBannerPatternIndex.get();
+//    }
+//
+//    public void registerUpdateListener(Runnable listener) {
+//        this.slotUpdateListener = listener;
+//    }
+
+    @Override
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+//        Slot slot = (Slot)this.slots.get(index);
+//        if (slot != null && slot.hasItem()) {
+//            ItemStack itemstack1 = slot.getItem();
+//            itemstack = itemstack1.copy();
+//            if (index == this.resultSlot.index) {
+//                if (!this.moveItemStackTo(itemstack1, 4, 40, true)) {
+//                    return ItemStack.EMPTY;
+//                }
+//
+//                slot.onQuickCraft(itemstack1, itemstack);
+//            } else if (index != this.fabricSheetSlot.index && index != this.patternSlot.index) {
+//                if (itemstack1.getItem() instanceof BannerItem) {
+//                    if (!this.moveItemStackTo(itemstack1, this.fabricSheetSlot.index, this.fabricSheetSlot.index + 1, false)) {
+//                        return ItemStack.EMPTY;
+//                    }
+//                } else if (itemstack1.getItem() instanceof BannerPatternItem) {
+//                    if (!this.moveItemStackTo(itemstack1, this.patternSlot.index, this.patternSlot.index + 1, false)) {
+//                        return ItemStack.EMPTY;
+//                    }
+//                } else if (index >= 4 && index < 31) {
+//                    if (!this.moveItemStackTo(itemstack1, 31, 40, false)) {
+//                        return ItemStack.EMPTY;
+//                    }
+//                } else if (index >= 31 && index < 40 && !this.moveItemStackTo(itemstack1, 4, 31, false)) {
+//                    return ItemStack.EMPTY;
+//                }
+//            } else if (!this.moveItemStackTo(itemstack1, 4, 40, false)) {
+//                return ItemStack.EMPTY;
+//            }
+//
+//            if (itemstack1.isEmpty()) {
+//                slot.setByPlayer(ItemStack.EMPTY);
+//            } else {
+//                slot.setChanged();
+//            }
+//
+//            if (itemstack1.getCount() == itemstack.getCount()) {
+//                return ItemStack.EMPTY;
+//            }
+//
+//            slot.onTake(player, itemstack1);
+//        }
+
+        return itemstack;
+    }
+
+//    @Override
+//    public void removed(Player player) {
+//        super.removed(player);
+//        this.access.execute((p_39871_, p_39872_) -> {
+//            this.clearContainer(player, this.inputContainer);
+//        });
+//    }
+
+    private void setupResultSlot(Holder<BannerPattern> pattern) {
+//        ItemStack itemstack = this.fabricSheetSlot.getItem();
+//        ItemStack itemstack2 = ItemStack.EMPTY;
+//        if (!itemstack.isEmpty()) {
+//            itemstack2 = itemstack.copyWithCount(1);
+//            itemstack2.update(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY, (p_330070_) -> {
+//                return (new BannerPatternLayers.Builder()).addAll(p_330070_).add(pattern, dyecolor).build();
+//            });
+//        }
+//
+//        if (!ItemStack.matches(itemstack2, this.resultSlot.getItem())) {
+//            this.resultSlot.set(itemstack2);
+//        }
+
+    }
+
+//    public Slot getFabricSheetSlot() {
+//        return this.fabricSheetSlot;
+//    }
+//
+//    public Slot getPatternSlot() {
+//        return this.patternSlot;
+//    }
+//
+//    public Slot getResultSlot() {
+//        return this.resultSlot;
 //    }
 }
