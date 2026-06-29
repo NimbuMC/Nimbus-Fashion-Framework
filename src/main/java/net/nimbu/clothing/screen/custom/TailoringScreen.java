@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.nimbu.clothing.Clothing;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -138,9 +140,10 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
 
                     guiGraphics.blitSprite(resourcelocation1, l1, i2, PATTERN_IMAGE_SIZE, PATTERN_IMAGE_SIZE);
 
-
-                    Item item = (this.menu).getSelectableStyles().get(0);
-                    guiGraphics.renderItem(item.getDefaultInstance(), l1+1, i2+1);}
+                    Item item = (this.menu).getSelectableStyles().get(k1);
+                    ItemStack stack = item.getDefaultInstance();
+                    stack.set(DataComponents.DYED_COLOR, new DyedItemColor(0xFFFFFF, false));
+                    guiGraphics.renderItem(stack, l1+1, i2+1);}
             }
         }
     }
