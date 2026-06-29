@@ -7,7 +7,9 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.nimbu.clothing.Clothing;
 import net.nimbu.clothing.item.custom.ClothingItem;
-import net.nimbu.clothing.item.custom.SchematicItem;
+import net.nimbu.clothing.item.custom.StyleSchematicItem;
+
+import java.util.List;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Clothing.MOD_ID);
@@ -15,25 +17,9 @@ public class ModItems {
     public static final DeferredItem<Item> FABRIC_SHEET = ITEMS.register("fabric_sheet",
             () -> new Item(new Item.Properties()));
 
-//    public static final DeferredItem<Item> STYLE_SCHEMATIC = ITEMS.register("style_schematic",
-//            () -> new SchematicItem(new Item.Properties()));
-
-    public static final DeferredItem<Item> MODERN_STYLE_SCHEMATIC = ITEMS.register("modern_style_schematic",
-            () -> new SchematicItem(new Item.Properties()));
-    public static final DeferredItem<Item> HERO_STYLE_SCHEMATIC = ITEMS.register("hero_style_schematic",
-            () -> new SchematicItem(new Item.Properties()));
-    public static final DeferredItem<Item> SUMMER_STYLE_SCHEMATIC = ITEMS.register("summer_style_schematic",
-            () -> new SchematicItem(new Item.Properties()));
-    public static final DeferredItem<Item> CREATOR_STYLE_SCHEMATIC = ITEMS.register("creator_style_schematic",
-            () -> new SchematicItem(new Item.Properties()));
-    public static final DeferredItem<Item> KITTY_STYLE_SCHEMATIC = ITEMS.register("kitty_style_schematic",
-            () -> new SchematicItem(new Item.Properties()));
-
-
 
 
     //Default Clothing:
-
     public static final DeferredItem<Item> HOODIE = ITEMS.register("hoodie",
             () -> new ClothingItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.CHESTPLATE,
                     new Item.Properties()
@@ -58,6 +44,7 @@ public class ModItems {
                             .durability(ArmorItem.Type.HELMET.getDurability(10)),
                     0xFFFFFFF));
 
+
     //Kitty clothing:
     public static final DeferredItem<Item> CAT_EARS = ITEMS.register("cat_ears",
             () -> new ClothingItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.HELMET,
@@ -65,6 +52,41 @@ public class ModItems {
                             .durability(ArmorItem.Type.HELMET.getDurability(10)),
                     0xFFFFFFF));
 
+
+    //Schematic:
+    public static final DeferredItem<Item> MODERN_STYLE_SCHEMATIC = ITEMS.register("modern_style_schematic",
+            () -> new StyleSchematicItem(new Item.Properties(),
+                    List.of(ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),
+                            ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),
+                            ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),
+                            ModItems.CAT_EARS.get(),
+                            ModItems.SWEATPANTS.get(),
+                            ModItems.SNEAKERS.get()
+                    )));
+
+    public static final DeferredItem<Item> HERO_STYLE_SCHEMATIC = ITEMS.register("hero_style_schematic",
+            () -> new StyleSchematicItem(new Item.Properties(),
+                    List.of(ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),
+                            ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get()
+                    )));
+
+    public static final DeferredItem<Item> SUMMER_STYLE_SCHEMATIC = ITEMS.register("summer_style_schematic",
+            () -> new StyleSchematicItem(new Item.Properties(),
+                    List.of(ModItems.HOODIE.get(),
+                            ModItems.CAT_EARS.get()
+                    )));
+
+    public static final DeferredItem<Item> CREATOR_STYLE_SCHEMATIC = ITEMS.register("creator_style_schematic",
+            () -> new StyleSchematicItem(new Item.Properties(),
+                    List.of(ModItems.HOODIE.get(),
+                            ModItems.CAT_EARS.get()
+                    )));
+
+    public static final DeferredItem<Item> KITTY_STYLE_SCHEMATIC = ITEMS.register("kitty_style_schematic",
+            () -> new StyleSchematicItem(new Item.Properties(),
+                    List.of(ModItems.HOODIE.get(),
+                            ModItems.CAT_EARS.get()
+                    )));
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
