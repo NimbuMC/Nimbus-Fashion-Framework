@@ -54,9 +54,8 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
 
 
     private static final ResourceLocation STYLE_SELECTED_SPRITE = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "container/tailoring/style_selected");
-    private static final ResourceLocation PATTERN_HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace("container/loom/pattern_highlighted");
+    private static final ResourceLocation STYLE_HIGHLIGHTED_SPRITE = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "container/tailoring/style_highlighted");
     private static final ResourceLocation STYLE_SPRITE = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "container/tailoring/style");
-
 
     private static final ResourceLocation SCROLLER_SPRITE = ResourceLocation.withDefaultNamespace("container/loom/scroller");
     private static final ResourceLocation SCROLLER_DISABLED_SPRITE = ResourceLocation.withDefaultNamespace("container/loom/scroller_disabled");
@@ -125,7 +124,7 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
                     if (k1 == (this.menu).getSelectedStyleIndex()) {
                         resourcelocation1 = STYLE_SELECTED_SPRITE;
                     } else if (flag) {
-                        resourcelocation1 = PATTERN_HIGHLIGHTED_SPRITE;
+                        resourcelocation1 = STYLE_HIGHLIGHTED_SPRITE;
                     } else {
                         resourcelocation1 = STYLE_SPRITE;
                     }
@@ -162,9 +161,9 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
                     double d1 = mouseY - (double)(topCorner + k * PATTERN_IMAGE_SIZE);
                     int i1 = k + this.startRow;
                     int j1 = i1 * STYLE_COLUMNS + l;
-                    if (d0 >= 0.0 && d1 >= 0.0 && d0 < PATTERN_IMAGE_SIZE && d1 < PATTERN_IMAGE_SIZE && ((TailoringMenu)this.menu).clickMenuButton(this.minecraft.player, j1)) {
+                    if (d0 >= 0.0 && d1 >= 0.0 && d0 < PATTERN_IMAGE_SIZE && d1 < PATTERN_IMAGE_SIZE && (this.menu).clickMenuButton(this.minecraft.player, j1)) {
                         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_LOOM_SELECT_PATTERN, 1.0F));
-                        this.minecraft.gameMode.handleInventoryButtonClick(((TailoringMenu)this.menu).containerId, j1);
+                        this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, j1);
                         return true;
                     }
                 }
@@ -214,18 +213,13 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
 
 
 
-        ItemStack itemstack = ((TailoringMenu)this.menu).getResultSlot().getItem();
-//        if (itemstack.isEmpty()) {
-//            this.resultBannerPatterns = null;
-//        } else {
-//            this.resultBannerPatterns = (BannerPatternLayers)itemstack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
-//        }
+        ItemStack itemstack = (this.menu).getResultSlot().getItem();
 
-        ItemStack itemstack1 = ((TailoringMenu)this.menu).getSchematicSlot().getItem();
-        ItemStack itemstack2 = ((TailoringMenu)this.menu).getFabricSheetSlot().getItem();
+        ItemStack itemstack1 = (this.menu).getSchematicSlot().getItem();
+        ItemStack itemstack2 = (this.menu).getFabricSheetSlot().getItem();
 
         if (!ItemStack.matches(itemstack1, this.styleSchematicStack) || !ItemStack.matches(itemstack2, this.fabricSheetStack)) {
-            this.displayStyles = !itemstack1.isEmpty() && !itemstack2.isEmpty() && !((TailoringMenu)this.menu).getSelectableStyles().isEmpty();
+            this.displayStyles = !itemstack1.isEmpty() && !itemstack2.isEmpty() && !(this.menu).getSelectableStyles().isEmpty();
         }
 
         if (this.startRow >= this.totalRowCount()) {

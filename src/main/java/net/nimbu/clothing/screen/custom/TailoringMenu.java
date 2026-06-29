@@ -28,7 +28,6 @@ public class TailoringMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
     final DataSlot selectedStyleIndex;
     Runnable slotUpdateListener;
-//    private final HolderGetter<BannerPattern> patternGetter;
     private final Slot fabricSheetSlot;
     private final Slot schematicSlot;
     private final Slot resultSlot;
@@ -83,7 +82,7 @@ public class TailoringMenu extends AbstractContainerMenu {
             public void onTake(Player player, ItemStack stack) {
                 TailoringMenu.this.fabricSheetSlot.remove(1);
                 if (!TailoringMenu.this.fabricSheetSlot.hasItem()) {
-                    //TailoringMenu.this.selectedBannerPatternIndex.set(-1);
+                    TailoringMenu.this.selectedStyleIndex.set(-1);
                 }
 
                 access.execute((p_39952_, p_39953_) -> {
@@ -110,7 +109,6 @@ public class TailoringMenu extends AbstractContainerMenu {
         }
 
         //this.addDataSlot(this.selectedBannerPatternIndex);
-        //this.patternGetter = playerInventory.player.registryAccess().lookupOrThrow(Registries.BANNER_PATTERN);
     }
 
     @Override
@@ -156,8 +154,8 @@ public class TailoringMenu extends AbstractContainerMenu {
 
     public void slotsChanged(Container inventory) {
         ItemStack itemstack = this.schematicSlot.getItem();
-        ItemStack itemstack2 = this.fabricSheetSlot.getItem();
-        if (!itemstack.isEmpty()) {
+        ItemStack itemstack1 = this.fabricSheetSlot.getItem();
+        if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
             int i = this.selectedStyleIndex.get();
             boolean flag = this.isValidStyleIndex(i);
             List<Item> list = this.selectableStyles;
@@ -186,7 +184,7 @@ public class TailoringMenu extends AbstractContainerMenu {
             }
 
             this.broadcastChanges();
-        } else {
+        } else { //if no schematic
             this.resultSlot.set(ItemStack.EMPTY);
             this.selectableStyles = List.of();
             this.selectedStyleIndex.set(-1);
