@@ -2,12 +2,16 @@ package net.nimbu.clothing.screen.custom;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -16,6 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.nimbu.clothing.Clothing;
 import org.joml.Quaternionf;
@@ -84,8 +89,8 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
         int j = this.topPos;
 
 
-        Slot fabricSheetSlot = ((TailoringMenu)this.menu).getFabricSheetSlot();
-        Slot schematicSlot = ((TailoringMenu)this.menu).getSchematicSlot();
+        Slot fabricSheetSlot = (this.menu).getFabricSheetSlot();
+        Slot schematicSlot = (this.menu).getSchematicSlot();
         if (!fabricSheetSlot.hasItem()) {
             guiGraphics.blitSprite(EMPTY_SLOT_FABRIC_SHEET, x+13, y+25, 16, 16);
         }
@@ -129,9 +134,13 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
                         resourcelocation1 = STYLE_SPRITE;
                     }
 
+
+
                     guiGraphics.blitSprite(resourcelocation1, l1, i2, PATTERN_IMAGE_SIZE, PATTERN_IMAGE_SIZE);
-                    //this.renderPattern(guiGraphics, (Holder)list.get(k1), l1, i2);
-                }
+
+
+                    Item item = (this.menu).getSelectableStyles().get(0);
+                    guiGraphics.renderItem(item.getDefaultInstance(), l1+1, i2+1);}
             }
         }
     }
