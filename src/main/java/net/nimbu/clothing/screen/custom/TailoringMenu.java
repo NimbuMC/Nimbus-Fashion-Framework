@@ -155,22 +155,22 @@ public class TailoringMenu extends AbstractContainerMenu {
     public void slotsChanged(Container inventory) {
         ItemStack itemstack = this.schematicSlot.getItem();
         ItemStack itemstack1 = this.fabricSheetSlot.getItem();
-        if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
+        if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {  //if both items present
             int i = this.selectedStyleIndex.get();
             boolean flag = this.isValidStyleIndex(i);
             List<Item> list = this.selectableStyles;
             this.selectableStyles = this.getSelectableStyles(itemstack);
             Item item;
-            if (this.selectableStyles.size() == 1) {
+            if (this.selectableStyles.size() == 1) { //if only one option, set to it
                 this.selectedStyleIndex.set(0);
                 item = this.selectableStyles.get(0);
-            } else if (!flag) {
+            } else if (!flag) { //if selection out of bounds, set to -1
                 this.selectedStyleIndex.set(-1);
                 item = null;
-            } else {
+            } else { //if a valid selection
                 Item item1 = list.get(i);
                 int j = this.selectableStyles.indexOf(item1);
-                if (j != -1) {
+                if (j != -1) { //if item found
                     item = item1;
                     this.selectedStyleIndex.set(j);
                 } else {
@@ -179,8 +179,12 @@ public class TailoringMenu extends AbstractContainerMenu {
                 }
             }
 
+
             if (item == null) {
                 this.resultSlot.set(ItemStack.EMPTY);
+            }
+            else{
+                this.setupResultSlot(item);
             }
 
             this.broadcastChanges();
@@ -209,7 +213,7 @@ public class TailoringMenu extends AbstractContainerMenu {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index == this.resultSlot.index) {
-                if (!this.moveItemStackTo(itemstack1, 4, 40, true)) {
+                if (!this.moveItemStackTo(itemstack1, 3, 39, true)) {
                     return ItemStack.EMPTY;
                 }
 

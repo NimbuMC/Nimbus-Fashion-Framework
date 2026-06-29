@@ -56,12 +56,11 @@ public class ModItems {
     //Schematic:
     public static final DeferredItem<Item> MODERN_STYLE_SCHEMATIC = ITEMS.register("modern_style_schematic",
             () -> new StyleSchematicItem(new Item.Properties(),
-                    List.of(ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),
-                            ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),
-                            ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),ModItems.HOODIE.get(),
+                    List.of(ModItems.HOODIE.get(),
                             ModItems.CAT_EARS.get(),
                             ModItems.SWEATPANTS.get(),
-                            ModItems.SNEAKERS.get()
+                            ModItems.SNEAKERS.get(),
+                            ModItems.SUNGLASSES.get()
                     )));
 
     public static final DeferredItem<Item> HERO_STYLE_SCHEMATIC = ITEMS.register("hero_style_schematic",
