@@ -24,7 +24,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
 
         this.tag(ItemTags.HEAD_ARMOR)
-                .add(ModItems.SUNGLASSES.get());
+                .add(ModItems.SUNGLASSES.get())
+                .add(ModItems.CAT_EARS.get());
 
         this.tag(ItemTags.CHEST_ARMOR)
                 .add(ModItems.HOODIE.get());
@@ -39,12 +40,14 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.HOODIE.get())
                 .add(ModItems.SWEATPANTS.get())
                 .add(ModItems.SNEAKERS.get())
-                .add(ModItems.SUNGLASSES.get());
+                .add(ModItems.SUNGLASSES.get())
+                .add(ModItems.CAT_EARS.get());
 
         this.tag(ItemTags.DYEABLE)
                 .add(ModItems.HOODIE.get())
                 .add(ModItems.SWEATPANTS.get())
-                .add(ModItems.SNEAKERS.get());
+                .add(ModItems.SNEAKERS.get())
+                .add(ModItems.CAT_EARS.get());
 
 
     }

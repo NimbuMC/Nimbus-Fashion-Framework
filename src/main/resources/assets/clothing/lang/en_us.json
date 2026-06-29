@@ -9,10 +9,9 @@
   "examplemod.configuration.magicNumberIntroduction": "Magic Number Text",
   "examplemod.configuration.magicNumber": "Magic Number",
 
-  "item.clothing.cloth": "Cloth",
+  "item.clothing.fabric_sheet": "Fabric Sheet",
   "block.clothing.tailoring_table": "Tailoring Table",
   "container.tailor": "Tailoring Table",
-
 
   "item.clothing.hoodie": "Hoodie",
   "item.clothing.sunglasses": "Sunglasses",

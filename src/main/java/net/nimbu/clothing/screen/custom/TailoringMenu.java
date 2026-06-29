@@ -1,24 +1,17 @@
 package net.nimbu.clothing.screen.custom;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BannerPatternTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.nimbu.clothing.block.ModBlocks;
+import net.nimbu.clothing.item.ModItems;
+import net.nimbu.clothing.item.custom.SchematicItem;
 import net.nimbu.clothing.screen.ModMenuTypes;
 
 import java.util.List;
@@ -34,8 +27,8 @@ public class TailoringMenu extends AbstractContainerMenu {
     private List<Holder<BannerPattern>> selectablePatterns;
     Runnable slotUpdateListener;
 //    private final HolderGetter<BannerPattern> patternGetter;
-//    final Slot fabricSheetSlot;
-//    private final Slot patternSlot;
+    private final Slot fabricSheetSlot;
+    private final Slot schematicSlot;
 //    private final Slot resultSlot;
     long lastSoundTime;
     private final Container inputContainer;
@@ -65,16 +58,16 @@ public class TailoringMenu extends AbstractContainerMenu {
 //            }
         };
         this.access = access;
-//        this.fabricSheetSlot = this.addSlot(new Slot(this.inputContainer, 0, 13, 26) {
-//            public boolean mayPlace(ItemStack p_39918_) {
-//                return p_39918_.getItem() instanceof BannerItem;
-//            }
-//        });
-//        this.patternSlot = this.addSlot(new Slot(this.inputContainer, 2, 23, 45) {
-//            public boolean mayPlace(ItemStack p_39936_) {
-//                return p_39936_.getItem() instanceof BannerPatternItem;
-//            }
-//        });
+        this.fabricSheetSlot = this.addSlot(new Slot(this.inputContainer, 0, 13, 25) {
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.FABRIC_SHEET.get());
+            }
+        });
+        this.schematicSlot = this.addSlot(new Slot(this.inputContainer, 2, 13, 45) {
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem() instanceof SchematicItem;
+            }
+        });
 //        this.resultSlot = this.addSlot(new Slot(this.outputContainer, 0, 143, 57) {
 //            public boolean mayPlace(ItemStack stack) {
 //                return false;
@@ -98,19 +91,19 @@ public class TailoringMenu extends AbstractContainerMenu {
 ////            }
 //        });
 
-//        int k;
-//        for(k = 0; k < 3; ++k) {
-//            for(int j = 0; j < 9; ++j) {
-//                this.addSlot(new Slot(playerInventory, j + k * 9 + 9, 8 + j * 18, 84 + k * 18));
-//            }
-//        }
-//
-//        for(k = 0; k < 9; ++k) {
-//            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
-//        }
-//
-//        this.addDataSlot(this.selectedBannerPatternIndex);
-//        this.patternGetter = playerInventory.player.registryAccess().lookupOrThrow(Registries.BANNER_PATTERN);
+
+        for(int k = 0; k < 3; ++k) {
+            for(int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(playerInventory, j + k * 9 + 9, 8 + j * 18, 84 + k * 18));
+            }
+        }
+
+        for(int k = 0; k < 9; ++k) {
+            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
+        }
+
+        //this.addDataSlot(this.selectedBannerPatternIndex);
+        //this.patternGetter = playerInventory.player.registryAccess().lookupOrThrow(Registries.BANNER_PATTERN);
     }
 
     @Override
@@ -285,13 +278,13 @@ public class TailoringMenu extends AbstractContainerMenu {
 
     }
 
-//    public Slot getFabricSheetSlot() {
-//        return this.fabricSheetSlot;
-//    }
-//
-//    public Slot getPatternSlot() {
-//        return this.patternSlot;
-//    }
+    public Slot getFabricSheetSlot() {
+        return this.fabricSheetSlot;
+    }
+
+    public Slot getSchematicSlot() {
+        return this.schematicSlot;
+    }
 //
 //    public Slot getResultSlot() {
 //        return this.resultSlot;
