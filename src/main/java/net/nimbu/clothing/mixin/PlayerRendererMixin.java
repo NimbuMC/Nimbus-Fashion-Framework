@@ -20,17 +20,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerRenderer.class)
 public class PlayerRendererMixin {
-
-    //Add clothing layer
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void addCustomArmorLayer(EntityRendererProvider.Context context,
-                                     boolean useSlimModel,
-                                     CallbackInfo ci) {
-
-        PlayerRenderer self = (PlayerRenderer)(Object)this;
-        self.addLayer(new ClothingLayer(self, context, useSlimModel));
-
-    }
+//
+//    //Add clothing layer
+//    @Inject(method = "<init>", at = @At("TAIL"))
+//    private void addCustomArmorLayer(EntityRendererProvider.Context context,
+//                                     boolean useSlimModel,
+//                                     CallbackInfo ci) {
+//
+//        PlayerRenderer self = (PlayerRenderer)(Object)this;
+//        self.addLayer(new ClothingLayer(self, context, useSlimModel));
+//
+//    }
 
     //Handle player skin layers:
     @Inject(
