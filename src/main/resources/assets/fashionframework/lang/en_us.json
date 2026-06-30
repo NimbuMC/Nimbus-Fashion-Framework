@@ -1,0 +1,20 @@
+{
+  "itemGroup.examplemod": "Example Mod Tab",
+
+  "examplemod.configuration.title": "Example Mod Configs",
+  "examplemod.configuration.section.examplemod.common.toml": "Example Mod Configs",
+  "examplemod.configuration.section.examplemod.common.toml.title": "Example Mod Configs",
+  "examplemod.configuration.items": "Item List",
+  "examplemod.configuration.logDirtBlock": "Log Dirt Block",
+  "examplemod.configuration.magicNumberIntroduction": "Magic Number Text",
+  "examplemod.configuration.magicNumber": "Magic Number",
+
+  "item.fashionframework.fabric_sheet": "Fabric Sheet",
+  "block.fashionframework.tailoring_table": "Tailoring Table",
+  "container.tailor": "Tailoring Table",
+
+  "item.fashionframework.hoodie": "Hoodie",
+  "item.fashionframework.sunglasses": "Sunglasses",
+  "item.fashionframework.sweatpants": "Sweatpants",
+  "item.fashionframework.Sneakers": "Sneakers"
+}

@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "clothing:item/sweatpants_0",
-    "layer1": "clothing:item/sweatpants_1"
-  }
-}

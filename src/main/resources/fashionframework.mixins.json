@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.nimbu.fashionframework.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "PlayerRendererMixin",
+    "ArmorRendererMixin",
+    "ItemInHandRendererMixin"
+  ],
+  "injectors": {
+  "defaultRequire": 1
+  }
+}
