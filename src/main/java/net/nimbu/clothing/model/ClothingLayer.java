@@ -26,13 +26,13 @@ import net.nimbu.clothing.tags.ModTags;
 
 public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    private final PlayerModel<AbstractClientPlayer> model;
+    private final ClothingModel<AbstractClientPlayer> model;
 
     public ClothingLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent,
                          EntityRendererProvider.Context context, boolean slim) {
         super(parent);
-        this.model = new PlayerModel<>(
-                context.bakeLayer(slim ? ModelLayers.PLAYER_SLIM : ModelLayers.PLAYER),
+        this.model = new ClothingModel<>(
+                context.bakeLayer(slim ? ModModelLayers.CLOTHING_PLAYER_SLIM : ModModelLayers.CLOTHING_PLAYER),
                 slim);
     }
 
@@ -52,6 +52,8 @@ public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
 
         model.prepareMobModel(player, limbSwing, limbSwingAmount, partialTicks);
         model.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+
+        //poseStack.scale(1.001f,1.001f,1.001f);
 
         for (EquipmentSlot slot : new EquipmentSlot[] {
                 EquipmentSlot.LEGS,

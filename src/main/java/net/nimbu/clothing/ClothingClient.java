@@ -1,7 +1,13 @@
 package net.nimbu.clothing;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -9,11 +15,15 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.nimbu.clothing.item.ModItems;
 import net.nimbu.clothing.item.custom.ClothingItem;
+import net.nimbu.clothing.model.ClothingLayer;
+import net.nimbu.clothing.model.ClothingModel;
+import net.nimbu.clothing.model.ModModelLayers;
 import net.nimbu.clothing.screen.ModMenuTypes;
 import net.nimbu.clothing.screen.custom.TailoringScreen;
 
@@ -30,23 +40,78 @@ public class ClothingClient {
     }
 
     @SubscribeEvent
+    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+
+        event.getSkins().forEach(skin -> {
+            PlayerRenderer renderer = event.getSkin(skin);
+
+            renderer.addLayer(new ClothingLayer(
+                    renderer,
+                    event.getContext(),
+                    skin == PlayerSkin.Model.SLIM
+            ));
+        });
+
+    }
+
+    @SubscribeEvent
+    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(
+                ModModelLayers.CLOTHING_PLAYER,
+                () -> LayerDefinition.create(
+                        ClothingModel.createMesh(new CubeDeformation(0.01F), false),
+                        64, 64
+                )
+        );
+
+        event.registerLayerDefinition(
+                ModModelLayers.CLOTHING_PLAYER_SLIM,
+                () -> LayerDefinition.create(
+                        ClothingModel.createMesh(new CubeDeformation(0.01F), true),
+                        64, 64
+                )
+        );
+    }
+
+    @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             Minecraft minecraft = Minecraft.getInstance();
 
-            minecraft.getItemColors().register(
-                    (stack, tintIndex) -> {
-                        if (tintIndex == 0) {
-                            if(stack.getItem() instanceof ClothingItem clothingItem) {
+            minecraft.getItemColors().register((stack, tintIndex) -> {
+                        if (tintIndex == 0) { if(stack.getItem() instanceof ClothingItem clothingItem) {
                                 return 0xFF000000 | //ORs in the alpha value
-                                        stack.getOrDefault(
-                                                DataComponents.DYED_COLOR,
+                                        stack.getOrDefault(DataComponents.DYED_COLOR,
                                                 new DyedItemColor(clothingItem.getDefaultColor(), false)
-                                        ).rgb();
-                            }
-                        }
-                        return 0xFFFFFFFF;
-                    },
+                                        ).rgb();}}
+                        return 0xFFFFFFFF;},
+                    ModItems.SWEATPANTS.get()
+            );
+            minecraft.getItemColors().register((stack, tintIndex) -> {
+                        if (tintIndex == 0) { if(stack.getItem() instanceof ClothingItem clothingItem) {
+                            return 0xFF000000 | //ORs in the alpha value
+                                    stack.getOrDefault(DataComponents.DYED_COLOR,
+                                            new DyedItemColor(clothingItem.getDefaultColor(), false)
+                                    ).rgb();}}
+                        return 0xFFFFFFFF;},
+                    ModItems.SNEAKERS.get()
+            );
+            minecraft.getItemColors().register((stack, tintIndex) -> {
+                        if (tintIndex == 0) { if(stack.getItem() instanceof ClothingItem clothingItem) {
+                            return 0xFF000000 | //ORs in the alpha value
+                                    stack.getOrDefault(DataComponents.DYED_COLOR,
+                                            new DyedItemColor(clothingItem.getDefaultColor(), false)
+                                    ).rgb();}}
+                        return 0xFFFFFFFF;},
+                    ModItems.CAT_EARS.get()
+            );
+            minecraft.getItemColors().register((stack, tintIndex) -> {
+                        if (tintIndex == 0) { if(stack.getItem() instanceof ClothingItem clothingItem) {
+                            return 0xFF000000 | //ORs in the alpha value
+                                    stack.getOrDefault(DataComponents.DYED_COLOR,
+                                            new DyedItemColor(clothingItem.getDefaultColor(), false)
+                                    ).rgb();}}
+                        return 0xFFFFFFFF;},
                     ModItems.HOODIE.get()
             );
         });
