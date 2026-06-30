@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -33,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.nimbu.clothing.Clothing;
 import net.nimbu.clothing.item.ModItems;
+import net.nimbu.clothing.model.SkinCache;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -264,7 +266,9 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
         float f2 = (float) Math.atan((double) ((f - mouseX) / 40.0F));
         float f3 = (float) Math.atan((double) ((f1 - mouseY) / 40.0F));
 
+        ResourceLocation skin = ((AbstractClientPlayer) player).getSkin().texture();
 
+        guiGraphics.blit(skin, 10, 10, 0, 0, 64*2, 64*2, 64*2, 64*2);
 
         int selectedStyleIndex = (this.menu).getSelectedStyleIndex();
         if (selectedStyleIndex != -1) { //if a valid clothing item is selected

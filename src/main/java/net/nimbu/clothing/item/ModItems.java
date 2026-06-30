@@ -38,6 +38,11 @@ public class ModItems {
                             .durability(ArmorItem.Type.BOOTS.getDurability(10)),
                     0xFFFFFFF));
 
+    public static final DeferredItem<Item> LOW_SUNGLASSES = ITEMS.register("low_sunglasses",
+            () -> new ClothingItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.HELMET,
+                    new Item.Properties()
+                            .durability(ArmorItem.Type.HELMET.getDurability(10)),
+                    0xFFFFFFF));
     public static final DeferredItem<Item> SUNGLASSES = ITEMS.register("sunglasses",
             () -> new ClothingItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.HELMET,
                     new Item.Properties()
@@ -60,6 +65,7 @@ public class ModItems {
                             ModItems.CAT_EARS.get(),
                             ModItems.SWEATPANTS.get(),
                             ModItems.SNEAKERS.get(),
+                            ModItems.LOW_SUNGLASSES.get(),
                             ModItems.SUNGLASSES.get()
                     )));
 

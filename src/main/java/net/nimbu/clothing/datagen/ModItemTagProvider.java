@@ -5,7 +5,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.nimbu.clothing.Clothing;
 import net.nimbu.clothing.item.ModItems;
@@ -24,6 +23,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
 
         this.tag(ItemTags.HEAD_ARMOR)
+                .add(ModItems.LOW_SUNGLASSES.get())
                 .add(ModItems.SUNGLASSES.get())
                 .add(ModItems.CAT_EARS.get());
 
@@ -40,6 +40,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.HOODIE.get())
                 .add(ModItems.SWEATPANTS.get())
                 .add(ModItems.SNEAKERS.get())
+                .add(ModItems.LOW_SUNGLASSES.get())
                 .add(ModItems.SUNGLASSES.get())
                 .add(ModItems.CAT_EARS.get());
 
