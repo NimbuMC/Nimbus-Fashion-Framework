@@ -25,6 +25,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         this.tag(ItemTags.HEAD_ARMOR)
                 .add(ModItems.SUNGLASSES.get())
+                .add(ModItems.LOW_SUNGLASSES.get())
                 .add(ModItems.CAT_EARS.get());
 
         this.tag(ItemTags.CHEST_ARMOR)
@@ -41,6 +42,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.SWEATPANTS.get())
                 .add(ModItems.SNEAKERS.get())
                 .add(ModItems.SUNGLASSES.get())
+                .add(ModItems.LOW_SUNGLASSES.get())
                 .add(ModItems.CAT_EARS.get());
 
         this.tag(ItemTags.DYEABLE)

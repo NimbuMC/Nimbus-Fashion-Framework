@@ -43,6 +43,11 @@ public class ModItems {
                     new Item.Properties()
                             .durability(ArmorItem.Type.HELMET.getDurability(10)),
                     0xFFFFFFF));
+    public static final DeferredItem<Item> LOW_SUNGLASSES = ITEMS.register("low_sunglasses",
+            () -> new ClothingItem(ModArmorMaterials.CLOTH_ARMOUR_MATERIAL, ArmorItem.Type.HELMET,
+                    new Item.Properties()
+                            .durability(ArmorItem.Type.HELMET.getDurability(10)),
+                    0xFFFFFFF));
 
 
     //Kitty clothing:
@@ -60,7 +65,8 @@ public class ModItems {
                             ModItems.CAT_EARS.get(),
                             ModItems.SWEATPANTS.get(),
                             ModItems.SNEAKERS.get(),
-                            ModItems.SUNGLASSES.get()
+                            ModItems.SUNGLASSES.get(),
+                            ModItems.LOW_SUNGLASSES.get()
                     )));
 
     public static final DeferredItem<Item> HERO_STYLE_SCHEMATIC = ITEMS.register("hero_style_schematic",
