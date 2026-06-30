@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "fashionframework:item/hoodie_0",
+    "layer1": "fashionframework:item/hoodie_1"
+  }
+}

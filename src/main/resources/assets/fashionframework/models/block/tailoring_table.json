@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": ":block/tailoring_table_bottom",
+    "east": "fashionframework:block/tailoring_table_side",
+    "north": "fashionframework:block/tailoring_table_front",
+    "particle": "fashionframework:block/tailoring_table_front",
+    "south": "fashionframework:block/tailoring_table_front",
+    "up": "fashionframework:block/tailoring_table_top",
+    "west": "fashionframework:block/tailoring_table_side"
+  }
+}
