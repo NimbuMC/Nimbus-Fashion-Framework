@@ -1,11 +1,15 @@
 package net.nimbu.clothing.screen.custom;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -17,14 +21,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.nimbu.clothing.Clothing;
+import net.nimbu.clothing.item.ModItems;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -106,7 +114,7 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
         //scroller rendering:
         int k = (int)(39.0F * this.scrollOffs); //actual size of scroller, is SCROLLER_FULL_HEIGHT - SCROLLER_HEIGHT
         ResourceLocation resourcelocation = this.displayStyles ? SCROLLER_SPRITE : SCROLLER_DISABLED_SPRITE;
-        guiGraphics.blitSprite(resourcelocation, i + 73, j + PATTERN_IMAGE_SIZE + k, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        guiGraphics.blitSprite(resourcelocation, i + 73, j + 16 + k, SCROLLER_WIDTH, SCROLLER_HEIGHT);
 
 
         //Options
@@ -225,7 +233,7 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
 
 
 
-        ItemStack itemstack = (this.menu).getResultSlot().getItem();
+  //      ItemStack itemstack = (this.menu).getResultSlot().getItem();
 
         ItemStack itemstack1 = (this.menu).getSchematicSlot().getItem();
         ItemStack itemstack2 = (this.menu).getFabricSheetSlot().getItem();
@@ -249,42 +257,64 @@ public class TailoringScreen extends AbstractContainerScreen<TailoringMenu> {
 
 
     //Inventory player code:
-    public static void renderEntityInInventoryFollowsMouse(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int scale, float yOffset, float mouseX, float mouseY, LivingEntity entity) {
-        float f = (float)(x1 + x2) / 2.0F;
-        float f1 = (float)(y1 + y2) / 2.0F;
-        float f2 = (float)Math.atan((double)((f - mouseX) / 40.0F));
-        float f3 = (float)Math.atan((double)((f1 - mouseY) / 40.0F));
-        renderEntityInInventoryFollowsAngle(guiGraphics, x1, y1, x2, y2, scale, yOffset, f2, f3, entity);
+    public void renderEntityInInventoryFollowsMouse(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int scale, float yOffset, float mouseX, float mouseY, LivingEntity player) {
+
+        float f = (float) (x1 + x2) / 2.0F;
+        float f1 = (float) (y1 + y2) / 2.0F;
+        float f2 = (float) Math.atan((double) ((f - mouseX) / 40.0F));
+        float f3 = (float) Math.atan((double) ((f1 - mouseY) / 40.0F));
+
+
+
+        int selectedStyleIndex = (this.menu).getSelectedStyleIndex();
+        if (selectedStyleIndex != -1) { //if a valid clothing item is selected
+
+            ItemStack displayedItem = (this.menu).getSelectableStyles().get(selectedStyleIndex).getDefaultInstance();
+            ArmorItem displayedArmor = (ArmorItem) displayedItem.getItem();
+            EquipmentSlot slot = displayedArmor.getType().getSlot();
+            ItemStack realArmor = player.getItemBySlot(slot).copy();
+
+            try {
+                player.setItemSlot(slot, displayedItem);
+                renderEntityInInventoryFollowsAngle(guiGraphics, x1, y1, x2, y2, scale, yOffset, f2, f3, player);
+            } finally {
+                player.setItemSlot(slot, realArmor);
+            }
+        }
+        else{
+            renderEntityInInventoryFollowsAngle(guiGraphics, x1, y1, x2, y2, scale, yOffset, f2, f3, player);
+        }
+
     }
 
-    public static void renderEntityInInventoryFollowsAngle(GuiGraphics p_282802_, int p_275688_, int p_275245_, int p_275535_, int p_294406_, int p_294663_, float p_275604_, float angleXComponent, float angleYComponent, LivingEntity p_275689_) {
-        float f = (float)(p_275688_ + p_275535_) / 2.0F;
-        float f1 = (float)(p_275245_ + p_294406_) / 2.0F;
-        p_282802_.enableScissor(p_275688_, p_275245_, p_275535_, p_294406_);
+    public static void renderEntityInInventoryFollowsAngle(GuiGraphics p_282802_, int x1, int y1, int x2, int y2, int scale, float yOffset, float angleXComponent, float angleYComponent, LivingEntity player) {
+        float f = (float)(x1 + x2) / 2.0F;
+        float f1 = (float)(y1 + y2) / 2.0F;
+        p_282802_.enableScissor(x1, y1, x2, y2);
         float f2 = angleXComponent;
         float f3 = angleYComponent;
         Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
         Quaternionf quaternionf1 = (new Quaternionf()).rotateX(f3 * 20.0F * 0.017453292F);
         quaternionf.mul(quaternionf1);
-        float f4 = p_275689_.yBodyRot;
-        float f5 = p_275689_.getYRot();
-        float f6 = p_275689_.getXRot();
-        float f7 = p_275689_.yHeadRotO;
-        float f8 = p_275689_.yHeadRot;
-        p_275689_.yBodyRot = 180.0F + f2 * 20.0F;
-        p_275689_.setYRot(180.0F + f2 * 40.0F);
-        p_275689_.setXRot(-f3 * 20.0F);
-        p_275689_.yHeadRot = p_275689_.getYRot();
-        p_275689_.yHeadRotO = p_275689_.getYRot();
-        float f9 = p_275689_.getScale();
-        Vector3f vector3f = new Vector3f(0.0F, p_275689_.getBbHeight() / 2.0F + p_275604_ * f9, 0.0F);
-        float f10 = (float)p_294663_ / f9;
-        renderEntityInInventory(p_282802_, f, f1, f10, vector3f, quaternionf, quaternionf1, p_275689_);
-        p_275689_.yBodyRot = f4;
-        p_275689_.setYRot(f5);
-        p_275689_.setXRot(f6);
-        p_275689_.yHeadRotO = f7;
-        p_275689_.yHeadRot = f8;
+        float f4 = player.yBodyRot;
+        float f5 = player.getYRot();
+        float f6 = player.getXRot();
+        float f7 = player.yHeadRotO;
+        float f8 = player.yHeadRot;
+        player.yBodyRot = 180.0F + f2 * 20.0F;
+        player.setYRot(180.0F + f2 * 40.0F);
+        player.setXRot(-f3 * 20.0F);
+        player.yHeadRot = player.getYRot();
+        player.yHeadRotO = player.getYRot();
+        float f9 = player.getScale();
+        Vector3f vector3f = new Vector3f(0.0F, player.getBbHeight() / 2.0F + yOffset * f9, 0.0F);
+        float f10 = (float)scale / f9;
+        renderEntityInInventory(p_282802_, f, f1, f10, vector3f, quaternionf, quaternionf1, player);
+        player.yBodyRot = f4;
+        player.setYRot(f5);
+        player.setXRot(f6);
+        player.yHeadRotO = f7;
+        player.yHeadRot = f8;
         p_282802_.disableScissor();
     }
 
