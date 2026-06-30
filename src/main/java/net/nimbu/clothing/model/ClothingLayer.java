@@ -27,6 +27,7 @@ import net.nimbu.clothing.tags.ModTags;
 public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
     private final ClothingModel<AbstractClientPlayer> model;
+    private final boolean slim;
 
     public ClothingLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent,
                          EntityRendererProvider.Context context, boolean slim) {
@@ -34,6 +35,7 @@ public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
         this.model = new ClothingModel<>(
                 context.bakeLayer(slim ? ModModelLayers.CLOTHING_PLAYER_SLIM : ModModelLayers.CLOTHING_PLAYER),
                 slim);
+        this.slim=slim;
     }
 
     @Override
@@ -65,34 +67,45 @@ public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
             if (!stack.isEmpty() && stack.is(ModTags.Items.CLOTHING)) {
                 if (stack.getItem() instanceof ClothingItem clothingItem){
 
-                String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+                    String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
 
+                    //Draw the dyed layer
+                    ResourceLocation texture;
+                    if(slim){
+                        texture = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/slim/slim_"+path+"_layer_0.png");
+                    }
+                    else{
+                        texture = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/wide/"+path+"_layer_0.png");
+                    }
 
-                //Draw the dyed layer
-                ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/"+path+"_layer_0.png");
-                VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
-                int color = stack.getOrDefault(
-                        DataComponents.DYED_COLOR,
-                        new DyedItemColor(clothingItem.getDefaultColor(), false)).rgb();
+                    VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
+                    int color = stack.getOrDefault(
+                            DataComponents.DYED_COLOR,
+                            new DyedItemColor(clothingItem.getDefaultColor(), false)).rgb();
 
-                model.renderToBuffer(
-                        poseStack,
-                        vc,
-                        packedLight,
-                        OverlayTexture.NO_OVERLAY,
-                        color
-                );
+                    model.renderToBuffer(
+                            poseStack,
+                            vc,
+                            packedLight,
+                            OverlayTexture.NO_OVERLAY,
+                            color
+                    );
 
-                //Draw the non-dyed layer
-                texture = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/"+path+"_layer_1.png");
-                vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
+                    //Draw the non-dyed layer
+                    if(slim){
+                        texture = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/slim/slim_"+path+"_layer_1.png");
+                    }
+                    else{
+                        texture = ResourceLocation.fromNamespaceAndPath(Clothing.MOD_ID, "textures/models/clothes/wide/"+path+"_layer_1.png");
+                    }
+                    vc = buffer.getBuffer(RenderType.entityCutoutNoCull(texture));
 
-                model.renderToBuffer(
-                        poseStack,
-                        vc,
-                        packedLight,
-                        OverlayTexture.NO_OVERLAY
-                );
+                    model.renderToBuffer(
+                            poseStack,
+                            vc,
+                            packedLight,
+                            OverlayTexture.NO_OVERLAY
+                    );
 
                 }
             }
