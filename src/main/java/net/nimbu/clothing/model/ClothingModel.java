@@ -55,7 +55,6 @@ public class ClothingModel<T extends LivingEntity> extends HumanoidModel<T> {
     }
 
     public static MeshDefinition createMesh(CubeDeformation cubeDeformation, boolean slim) {
-
         MeshDefinition meshdefinition = HumanoidModel.createMesh(cubeDeformation, 0.0F);
         PartDefinition partdefinition = meshdefinition.getRoot();
         partdefinition.addOrReplaceChild("ear", CubeListBuilder.create().texOffs(24, 0).addBox(-3.0F, -6.0F, -1.0F, 6.0F, 6.0F, 1.0F, cubeDeformation), PartPose.ZERO);

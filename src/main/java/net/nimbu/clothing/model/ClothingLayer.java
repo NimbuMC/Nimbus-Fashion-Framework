@@ -26,13 +26,13 @@ import net.nimbu.clothing.tags.ModTags;
 
 public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    private final ClothingModel<AbstractClientPlayer> model;
+    private final PlayerModel<AbstractClientPlayer> model;
     private final boolean slim;
 
     public ClothingLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent,
                          EntityRendererProvider.Context context, boolean slim) {
         super(parent);
-        this.model = new ClothingModel<>(
+        this.model = new PlayerModel<>(
                 context.bakeLayer(slim ? ModModelLayers.CLOTHING_PLAYER_SLIM : ModModelLayers.CLOTHING_PLAYER),
                 slim);
         this.slim=slim;
