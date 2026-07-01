@@ -48,18 +48,9 @@ public class FashionFramework {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(ModItems.FABRIC_SHEET);
-            event.accept(ModBlocks.TAILORING_TABLE);
-            event.accept(ModItems.HERO_STYLE_SCHEMATIC);
-            event.accept(ModItems.SUMMER_STYLE_SCHEMATIC);
-            event.accept(ModItems.MODERN_STYLE_SCHEMATIC);
-            event.accept(ModItems.KITTY_STYLE_SCHEMATIC);
-            event.accept(ModItems.CREATOR_STYLE_SCHEMATIC);
         }
-        else if(event.getTabKey() == CreativeModeTabs.COMBAT){
-            event.accept(ModItems.HOODIE);
-            event.accept(ModItems.SWEATPANTS);
-            //event.accept(ModItems.HOODIE_HOOD);
-            event.accept(ModItems.SNEAKERS);
+        else if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS){
+            event.accept(ModBlocks.TAILORING_TABLE);
         }
     }
 
