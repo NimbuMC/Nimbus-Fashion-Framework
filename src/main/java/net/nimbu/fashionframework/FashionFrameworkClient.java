@@ -65,7 +65,7 @@ public class FashionFrameworkClient {
         event.registerLayerDefinition(
                 ModModelLayers.CLOTHING_PLAYER,
                 () -> LayerDefinition.create(
-                        ClothingModel.createMesh(new CubeDeformation(0.01F), false),
+                        ClothingModel.createMesh(new CubeDeformation(0.05F), false),
                         64, 64
                 )
         );

@@ -4,6 +4,7 @@ package net.nimbu.fashionframework.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -78,6 +79,7 @@ public class ClothingLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
                     int color = stack.getOrDefault(
                             DataComponents.DYED_COLOR,
                             new DyedItemColor(clothingItem.getDefaultColor(), false)).rgb();
+                    color |= 0xFF000000;
 
                     model.renderToBuffer(
                             poseStack,
