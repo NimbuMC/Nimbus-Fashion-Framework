@@ -94,6 +94,7 @@ public class ItemInHandRendererMixin {
                     int color = stack.getOrDefault(
                             DataComponents.DYED_COLOR,
                             new DyedItemColor(clothingItem.getDefaultColor(), false)).rgb();
+                    color |= 0xFF000000;
 
                     if (side == HumanoidArm.RIGHT) {
                         clothingModel.rightArm.render(
