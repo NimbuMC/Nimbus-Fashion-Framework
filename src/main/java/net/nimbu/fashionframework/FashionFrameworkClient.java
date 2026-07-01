@@ -33,7 +33,8 @@ import net.nimbu.fashionframework.screen.custom.TailoringScreen;
 public class FashionFrameworkClient {
 
 
-    public static PlayerModel handClothingModel;
+    public static PlayerModel slimHandClothingModel;
+    public static PlayerModel wideHandClothingModel;
 
     public FashionFrameworkClient(ModContainer container) {
         // Allows NeoForge to create a config screen for this mod's configs.
@@ -55,8 +56,11 @@ public class FashionFrameworkClient {
             ));
         });
 
-        handClothingModel = new PlayerModel<>(
-                event.getContext().bakeLayer(true ? ModModelLayers.CLOTHING_PLAYER_SLIM : ModModelLayers.CLOTHING_PLAYER),
+        slimHandClothingModel = new PlayerModel<>(
+                event.getContext().bakeLayer(ModModelLayers.CLOTHING_PLAYER_SLIM),
+                true);
+        wideHandClothingModel = new PlayerModel<>(
+                event.getContext().bakeLayer(ModModelLayers.CLOTHING_PLAYER),
                 true);
     }
 

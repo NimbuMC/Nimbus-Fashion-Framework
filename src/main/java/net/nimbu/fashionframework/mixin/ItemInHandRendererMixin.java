@@ -55,7 +55,14 @@ public class ItemInHandRendererMixin {
 
         PlayerModel<AbstractClientPlayer> vanilla = renderer.getModel();
 
-        PlayerModel clothingModel = FashionFrameworkClient.handClothingModel;
+        PlayerModel clothingModel;
+        if (slim){
+            clothingModel = FashionFrameworkClient.slimHandClothingModel;
+        }
+        else{
+            clothingModel = FashionFrameworkClient.wideHandClothingModel;
+        }
+
 
         vanilla.copyPropertiesTo(clothingModel);
         clothingModel.rightSleeve.copyFrom(clothingModel.rightArm);
