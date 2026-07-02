@@ -1,9 +1,13 @@
 package net.nimbu.fashionframework.mixin;
 
+import lain.mods.cos.api.CosArmorAPI;
+import lain.mods.cos.api.inventory.CAStacksBase;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.nimbu.fashionframework.model.CosmeticArmorBridge;
 import net.nimbu.fashionframework.tags.ModTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,9 +30,17 @@ public class PlayerRendererMixin {
         PlayerModel<AbstractClientPlayer> model =
                 ((PlayerRenderer)(Object)this).getModel();
 
-        boolean hasChestClothing = clientPlayer.getItemBySlot(EquipmentSlot.CHEST).is(ModTags.Items.CLOTHING);
-        boolean hasLegClothing  = clientPlayer.getItemBySlot(EquipmentSlot.LEGS).is(ModTags.Items.CLOTHING);
-        //TODO: check cosmetic armour slots
+        boolean chestArmorVisible =
+                CosmeticArmorBridge.chestArmorVisible(clientPlayer.getUUID());
+        boolean legArmorVisible =
+                CosmeticArmorBridge.legArmorVisible(clientPlayer.getUUID());
+        ItemStack chestArmorPiece =
+                CosmeticArmorBridge.getChestArmorPiece(clientPlayer.getUUID());
+        ItemStack legArmorPiece =
+                CosmeticArmorBridge.getLegArmorPiece(clientPlayer.getUUID());
+
+        boolean hasChestClothing = !chestArmorVisible && (clientPlayer.getItemBySlot(EquipmentSlot.CHEST).is(ModTags.Items.CLOTHING) || chestArmorPiece.is(ModTags.Items.CLOTHING));
+        boolean hasLegClothing  = !legArmorVisible && (clientPlayer.getItemBySlot(EquipmentSlot.CHEST).is(ModTags.Items.CLOTHING) || legArmorPiece.is(ModTags.Items.CLOTHING));
 
         if(hasChestClothing) {
             model.leftSleeve.visible = false;
@@ -40,6 +52,36 @@ public class PlayerRendererMixin {
             model.rightPants.visible = false;
         }
     }
+
+//    //Handle player skin layers:
+//    @Inject(
+//            method = "setModelProperties",
+//            at = @At("TAIL"),
+//            cancellable = true
+//    )
+//    private void setModelProperties(
+//            AbstractClientPlayer clientPlayer,
+//            CallbackInfo ci
+//    ) {
+//        PlayerModel<AbstractClientPlayer> model =
+//                ((PlayerRenderer)(Object)this).getModel();
+//
+//
+//        CAStacksBase ca = CosArmorAPI.getCAStacks(clientPlayer.getUUID());
+//
+//        boolean hasChestClothing = !ca.isSkinArmor(2) && (clientPlayer.getItemBySlot(EquipmentSlot.CHEST).is(ModTags.Items.CLOTHING) || ca.getStackInSlot(2).is(ModTags.Items.CLOTHING));
+//        boolean hasLegClothing  = !ca.isSkinArmor(1) && (clientPlayer.getItemBySlot(EquipmentSlot.CHEST).is(ModTags.Items.CLOTHING) || ca.getStackInSlot(1).is(ModTags.Items.CLOTHING));
+//
+//        if(hasChestClothing) {
+//            model.leftSleeve.visible = false;
+//            model.rightSleeve.visible = false;
+//            model.jacket.visible = false;
+//        }
+//        if(hasLegClothing) {
+//            model.leftPants.visible = false;
+//            model.rightPants.visible = false;
+//        }
+//    }
 }
 
 
