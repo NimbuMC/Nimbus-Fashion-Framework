@@ -21,6 +21,7 @@ import net.minecraft.world.item.component.DyedItemColor;
 import net.nimbu.fashionframework.FashionFramework;
 import net.nimbu.fashionframework.FashionFrameworkClient;
 import net.nimbu.fashionframework.item.custom.ClothingItem;
+import net.nimbu.fashionframework.model.CosmeticArmorBridge;
 import net.nimbu.fashionframework.tags.ModTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -69,10 +70,41 @@ public class ItemInHandRendererMixin {
         clothingModel.leftSleeve.copyFrom(clothingModel.leftArm);
 
 
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        //need to run through each slot, and NOT apply it if there's an item in the matching cosmetic armor slot, rendering that one instead if there is
 
+        for (EquipmentSlot slot : new EquipmentSlot[] {
+                EquipmentSlot.LEGS,
+                EquipmentSlot.FEET,
+                EquipmentSlot.CHEST,
+                EquipmentSlot.HEAD
+        }) {
+
+            ItemStack cosmeticItemStack;
+            switch (slot){
+                case FEET -> {
+                    if (CosmeticArmorBridge.feetArmorVisible(player.getUUID())) {continue;} //if cosmetic armor is invisible, don't render any added layer
+                    cosmeticItemStack = CosmeticArmorBridge.getFeetArmorPiece(player.getUUID());
+                }
+                case LEGS -> {
+                    if (CosmeticArmorBridge.legArmorVisible(player.getUUID())) {continue;}
+                    cosmeticItemStack = CosmeticArmorBridge.getLegArmorPiece(player.getUUID());
+                }
+                case CHEST -> {
+                    if (CosmeticArmorBridge.chestArmorVisible(player.getUUID())) {continue;}
+                    cosmeticItemStack = CosmeticArmorBridge.getChestArmorPiece(player.getUUID());
+                }
+                default -> {
+                    if (CosmeticArmorBridge.headArmorVisible(player.getUUID())) {continue;}
+                    cosmeticItemStack = CosmeticArmorBridge.getHeadArmorPiece(player.getUUID());
+                }
+            }
 
             ItemStack stack = player.getItemBySlot(slot);
+            if(!cosmeticItemStack.isEmpty()){
+                stack = cosmeticItemStack; //replace with the cosmetic item if that is to be rendered instead
+            }
+
+
             if (!stack.isEmpty() && stack.is(ModTags.Items.CLOTHING)) {
                 if (stack.getItem() instanceof ClothingItem clothingItem) {
 
