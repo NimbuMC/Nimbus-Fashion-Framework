@@ -48,12 +48,6 @@ public class FashionFramework {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.FABRIC_SHEET);
-        }
-        else if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS){
-            event.accept(ModBlocks.TAILORING_TABLE);
-        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
