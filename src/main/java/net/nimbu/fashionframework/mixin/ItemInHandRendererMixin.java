@@ -164,7 +164,7 @@ public class ItemInHandRendererMixin {
 
                     //Draw the non-dyed layer
                     if (slim) {
-                        texture = ResourceLocation.fromNamespaceAndPath(FashionFramework.MOD_ID, "textures/models/clothes/slim/slim_" + path + "_layer_1.png");
+                        texture = ResourceLocation.fromNamespaceAndPath(namespace, "textures/models/clothes/slim/slim_" + path + "_layer_1.png");
                     } else {
                         texture = ResourceLocation.fromNamespaceAndPath(namespace, "textures/models/clothes/wide/" + path + "_layer_1.png");
                     }
