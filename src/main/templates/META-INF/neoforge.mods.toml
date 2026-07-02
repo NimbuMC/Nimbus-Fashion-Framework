@@ -88,6 +88,14 @@ Example mod description.
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.${mod_id}]]
+modId="cosmeticarmorreworked"
+type="optional"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
 [[mixins]]
 config = "fashionframework.mixins.json"
 
