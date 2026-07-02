@@ -2,6 +2,7 @@ package net.nimbu.fashionframework;
 
 import net.minecraft.world.item.CreativeModeTabs;
 import net.nimbu.fashionframework.block.ModBlocks;
+import net.nimbu.fashionframework.item.ModCreativeModeTabs;
 import net.nimbu.fashionframework.item.ModItems;
 import net.nimbu.fashionframework.screen.ModMenuTypes;
 
@@ -35,6 +36,7 @@ public class FashionFramework {
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
+        ModCreativeModeTabs.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModMenuTypes.register(modEventBus);
