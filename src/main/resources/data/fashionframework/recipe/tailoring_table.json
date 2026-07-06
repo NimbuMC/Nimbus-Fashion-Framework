@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "@": {
+      "tag": "c:ingots/iron"
+    },
+    "F": {
+      "item": "fashionframework:fabric_sheet"
+    }
+  },
+  "pattern": [
+    "#@#",
+    "#F#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fashionframework:tailoring_table"
+  }
+}
